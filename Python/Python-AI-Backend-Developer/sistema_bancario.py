@@ -38,41 +38,41 @@ def registro(saldo, /, *, extrato):
     print(extrato)
     print(f'\n\nSaldo: R$ {saldo:.2f}')
 
-def filtrar_usuarios(cpf, usuarios):
-    usuarios_filtrados = [usuario for usuario in usuarios if usuario["cpf"] == cpf]
-    return usuarios_filtrados[0] if usuarios_filtrados else None
+def filtrar_usuario(cpf, usuarios):
+    for usuario in usuarios:
+        if usuario["cpf"] == cpf:
+            return usuario
+    return None
 
-def criar_usuario(usuarios: list):
+def criar_usuario(usuarios):
     cpf = input('CPF: ')
-    usuario = filtrar_usuarios(cpf, usuarios)
-    
-    if usuario:
-        print(f'\n Já existe uma conta registrada com esse CPF.')
+    if filtrar_usuario(cpf, usuarios):
+        print('Já existe uma conta registrada com esse CPF.')
         return
     
     nome = input('Nome: ')
     data_nascimento = input('Data de nascimento: ')
-    endereço = input('Endereço: ')
+    endereco = input('Endereço: ')
 
-    usuarios.append({"nome" : nome, "data_nascimento" : data_nascimento, "cpf" : cpf, "endereço": endereço})
-    print(f'\nUsuário cadastrado com sucesso!')
+    novo_usuario = {"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "endereco": endereco}
+    usuarios.append(novo_usuario)
+    print('Usuário cadastrado com sucesso!')
 
 def criar_conta(agencia, numero_conta, usuarios):
     cpf = input('CPF: ')
-    usuario = filtrar_usuarios(cpf, usuarios)
+    usuario = filtrar_usuario(cpf, usuarios)
 
     if usuario:
         print('Conta criada com sucesso!')
-        return {"agencia" : agencia, "numero_conta" : numero_conta, "usuario" : usuario}
+        return {"agencia": agencia, "numero_conta": numero_conta, "usuario": usuario}
 
-    print(f'Usuário não encontrado...')
+    print('Usuário não encontrado...')
 
 def listar_contas():
     for conta in contas:
         print(f'\nAgência: {conta["agencia"]}'
               f'\nC/C: {conta["numero_conta"]}'
               f'\nTitular: {conta["usuario"]["nome"]}')
-        print(f'\n\n')
 
 menu = """
 [1] depositar
