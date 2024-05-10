@@ -6,6 +6,7 @@ extrato = ''
 numero_saques = 0
 usuarios = []
 contas = []
+numero_conta = 0
 
 def depositar(valor, saldo_atual, extrato_atual):
     if valor <= 0:
@@ -98,11 +99,10 @@ while True:
     elif opcao == 4:
         criar_usuario(usuarios)
     elif opcao == 5:
-        numero_conta = len(contas) + 1
         conta = criar_conta(AGENCIA, numero_conta, usuarios)
-
         if conta:
             contas.append(conta)
+            numero_conta += 1
     elif opcao == 6:
         listar_contas()
     elif opcao == 7:
