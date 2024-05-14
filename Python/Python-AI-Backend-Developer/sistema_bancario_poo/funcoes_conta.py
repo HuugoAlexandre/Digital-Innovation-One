@@ -6,7 +6,7 @@ from conta_corrente import *
 from conta_poupanca import *
 
 def menu():
-    menu = """\n
+    menu_selection = """\n
     ================ MENU ================
     [1]\tDepositar
     [2]\tSacar
@@ -17,8 +17,14 @@ def menu():
     [7]\tExcluir conta
     [8]\tSair
     >>> """
-    return int(input(textwrap.dedent(menu)))
 
+    opcao = input(textwrap.dedent(menu_selection))
+    try:
+        opcao = int(opcao)
+        return opcao
+    except:
+        print(f'Tipo de dado inválido para a opção, tente novamente.')
+        
 def log_transacao(func):
     def envelope(*args, **kwargs):
         resultado = func(*args, **kwargs)
@@ -105,12 +111,31 @@ def exibir_extrato(clientes):
  
     extrato = ""
     tem_transacao = False
-    for transacao in conta.historico.gerar_relatorio(): # tipo_transacao="saque" ou "deposito" como arg se quiser filtrar
-        tem_transacao = True
-        extrato += f"\n{transacao['data']}\n{transacao['tipo']}: R$ {transacao['valor']:.2f}\n"
-
-    if not tem_transacao:
-        extrato = "Não foram realizadas movimentações."
+    tipo_de_transacao = int(input("Deseja ver: \n"
+                              "[1] Apenas saques\n"
+                              "[2] Apenas depósitos\n"
+                              "[3] Ambos\n"
+                              ">>> "))
+    
+    if tipo_de_transacao == 1:
+        for transacao in conta.historico.gerar_relatorio(tipo_transacao="saque"):
+            tem_transacao = True
+            extrato += f"\n{transacao['data']}\n{transacao['tipo']}: R$ {transacao['valor']:.2f}\n"
+        
+        if not tem_transacao:
+            extrato = "\nSaques não foram realizados até o momento."
+    elif tipo_de_transacao == 2:
+        for transacao in conta.historico.gerar_relatorio(tipo_transacao="deposito"):
+            tem_transacao = True
+            extrato += f"\n{transacao['data']}\n{transacao['tipo']}: R$ {transacao['valor']:.2f}\n"
+        if not tem_transacao:
+            extrato = "\nDepósitos não foram realizados até o momento."
+    elif tipo_de_transacao == 3:
+        for transacao in conta.historico.gerar_relatorio():
+            tem_transacao = True
+            extrato += f"\n{transacao['data']}\n{transacao['tipo']}: R$ {transacao['valor']:.2f}\n"
+        if not tem_transacao:
+            extrato = "\nNenhum tipo de transação foi realizado até o momento."
 
     print(extrato)
     print(f"\nSaldo: R$ {conta.saldo:.2f}")
