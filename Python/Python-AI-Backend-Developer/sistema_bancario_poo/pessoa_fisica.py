@@ -1,4 +1,5 @@
-from cliente import *
+from cliente import Cliente
+
 
 class PessoaFisica(Cliente):
     def __init__(self, nome, data_nascimento, cpf, endereco):
@@ -8,5 +9,7 @@ class PessoaFisica(Cliente):
         self.cpf = cpf
 
     def __repr__(self) -> str:
-        return f"PessoaFisica(nome='{self.nome}', cpf='{self.cpf}, data_nascimento={self.data_nascimento}'," \
-               f"endereço={self.endereco})"
+        return (
+            f"PessoaFisica(nome='{self.nome}', cpf='{self.cpf}, data_nascimento={self.data_nascimento}',"
+            f"endereço={self.endereco})"
+        )

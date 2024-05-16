@@ -1,9 +1,11 @@
 import textwrap
-from deposito import *
-from saque import *
-from pessoa_fisica import * 
-from conta_corrente import *
-from conta_poupanca import *
+from datetime import datetime
+from conta_corrente import ContaCorrente
+from conta_poupanca import ContaPoupanca
+from deposito import Deposito
+from pessoa_fisica import PessoaFisica
+from saque import Saque
+
 
 def menu():
     menu_selection = """\n
@@ -22,24 +24,28 @@ def menu():
     try:
         opcao = int(opcao)
         return opcao
-    except:
-        print(f'Tipo de dado inválido para a opção, tente novamente.')
-        
+    except ValueError:
+        print("Tipo de dado inválido para a opção, tente novamente.")
+
+
 def log_transacao(func):
     def envelope(*args, **kwargs):
         resultado = func(*args, **kwargs)
         data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with open("log.txt", 'a', encoding='utf-8') as log:
+        with open("log.txt", "a", encoding="utf-8") as log:
             log.write(
-                f"[{data_hora} Função '{func.__name__}' executada com argumentos {args} e {kwargs}. Retornou {resultado}]\n"
+                f"[{data_hora} Função '{func.__name__}' executada com argumentos {args} e {kwargs}."
+                "Retornou {resultado}]\n"
             )
         return resultado
 
     return envelope
 
+
 def filtrar_cliente(cpf, clientes):
     clientes_filtrados = [cliente for cliente in clientes if cliente.cpf == cpf]
     return clientes_filtrados[0] if clientes_filtrados else None
+
 
 def recuperar_conta_cliente(cliente):
     if not cliente.contas:
@@ -61,6 +67,7 @@ def recuperar_conta_cliente(cliente):
         except ValueError:
             print("\nOpção inválida!")
     return None
+
 
 @log_transacao
 def depositar(clientes, valor):
@@ -112,20 +119,16 @@ def exibir_extrato(clientes):
         return
 
     print("\n================ EXTRATO ================")
- 
+
     extrato = ""
     tem_transacao = False
-    tipo_de_transacao = int(input("Deseja ver: \n"
-                              "[1] Apenas saques\n"
-                              "[2] Apenas depósitos\n"
-                              "[3] Ambos\n"
-                              ">>> "))
-    
+    tipo_de_transacao = int(input("Deseja ver: \n" "[1] Apenas saques\n" "[2] Apenas depósitos\n" "[3] Ambos\n" ">>> "))
+
     if tipo_de_transacao == 1:
         for transacao in conta.historico.gerar_relatorio(tipo_transacao="saque"):
             tem_transacao = True
             extrato += f"\n{transacao['data']}\n{transacao['tipo']}: R$ {transacao['valor']:.2f}\n"
-        
+
         if not tem_transacao:
             extrato = "\nSaques não foram realizados até o momento."
     elif tipo_de_transacao == 2:
@@ -144,6 +147,7 @@ def exibir_extrato(clientes):
     print(extrato)
     print(f"\nSaldo: R$ {conta.saldo:.2f}")
     print("==========================================")
+
 
 @log_transacao
 def criar_cliente(clientes):
@@ -164,6 +168,7 @@ def criar_cliente(clientes):
 
     print("\nCliente criado com sucesso!")
 
+
 @log_transacao
 def criar_conta(numero_conta, clientes, contas):
     cpf = input("Informe o CPF do cliente: ")
@@ -172,22 +177,21 @@ def criar_conta(numero_conta, clientes, contas):
     if not cliente:
         print("\nCliente não encontrado!")
         return
-    tipo_de_conta = input("[CC] - Conta Corrente\n"
-                          "[CP] - Conta Poupança\n"
-                          ">>> ").lower()
-    
-    if tipo_de_conta == 'cc':
+    tipo_de_conta = input("[CC] - Conta Corrente\n" "[CP] - Conta Poupança\n" ">>> ").lower()
+
+    if tipo_de_conta == "cc":
         conta = ContaCorrente.nova_conta(cliente=cliente, numero=numero_conta)
-    elif tipo_de_conta == 'cp':
+    elif tipo_de_conta == "cp":
         conta = ContaPoupanca.nova_conta(cliente=cliente, numero=numero_conta)
     else:
-        print(f'Tipo de conta inválida.')
+        print("Tipo de conta inválida.")
         return
 
     contas.append(conta)
     cliente.contas.append(conta)
 
     print("\nConta criada com sucesso!")
+
 
 def listar_contas(contas, clientes):
     if len(contas) == 0:
@@ -202,6 +206,7 @@ def listar_contas(contas, clientes):
         else:
             print("Esta conta foi excluída.")
 
+
 @log_transacao
 def excluir_conta(clientes, contas):
     cpf = input("Informe o CPF do cliente: ")
@@ -210,11 +215,11 @@ def excluir_conta(clientes, contas):
     if not cliente:
         print("\nCliente não encontrado, fluxo de criação de conta encerrado!")
         return
-    
+
     conta = recuperar_conta_cliente(cliente)
     if conta and conta in cliente.contas:
         cliente.contas.remove(conta)
-        contas.remove(conta)  
+        contas.remove(conta)
         print("\nConta excluída com sucesso!")
     else:
-        print('\nNão há contas para excluir.')
+        print("\nNão há contas para excluir.")

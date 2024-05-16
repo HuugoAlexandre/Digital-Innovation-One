@@ -1,5 +1,6 @@
-from conta import *
-from saque import *
+from conta import Conta
+from saque import Saque
+
 
 class ContaCorrente(Conta):
     def __init__(self, numero, cliente, limite=500, limite_saques=3):
@@ -32,6 +33,6 @@ class ContaCorrente(Conta):
             C/C:\t\t{self.numero}
             Titular:\t{self.cliente.nome}
         """
-    
+
     def __repr__(self) -> str:
         return f"ContaCorrente(numero='{self.numero}', cliente='{self.cliente}')"

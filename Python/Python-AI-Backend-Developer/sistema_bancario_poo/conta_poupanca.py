@@ -1,5 +1,6 @@
-from conta import *
-from saque import *
+from conta import Conta
+from saque import Saque
+
 
 class ContaPoupanca(Conta):
     def __init__(self, numero, cliente, limite=2000, limite_saques=5):
@@ -32,6 +33,6 @@ class ContaPoupanca(Conta):
             C/P:\t\t{self.numero}
             Titular:\t{self.cliente.nome}
         """
-    
+
     def __repr__(self) -> str:
         return f"ContaPoupanca(numero='{self.numero}', cliente='{self.cliente}')"

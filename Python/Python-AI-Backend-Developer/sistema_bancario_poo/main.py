@@ -1,4 +1,14 @@
-from funcoes_conta import *
+from funcoes_conta import (
+    menu,
+    depositar,
+    sacar,
+    exibir_extrato,
+    criar_cliente,
+    criar_conta,
+    listar_contas,
+    excluir_conta,
+)
+
 
 def main():
     clientes = []
@@ -28,5 +38,6 @@ def main():
                 break
             else:
                 print("\nOperação inválida, por favor selecione novamente a operação desejada.")
+
 
 main()

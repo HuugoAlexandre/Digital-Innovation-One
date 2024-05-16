@@ -1,4 +1,5 @@
-from transacao import *
+from transacao import Transacao
+
 
 class Deposito(Transacao):
     def __init__(self, valor):
