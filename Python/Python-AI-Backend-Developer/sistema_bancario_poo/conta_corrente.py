@@ -32,3 +32,6 @@ class ContaCorrente(Conta):
             C/C:\t\t{self.numero}
             Titular:\t{self.cliente.nome}
         """
+    
+    def __repr__(self) -> str:
+        return f"ContaCorrente(numero='{self.numero}', cliente='{self.cliente}')"

@@ -5,6 +5,7 @@ class Cliente:
         self.indice = 0
 
     def realizar_transacao(self, conta, transacao):
+        print(f'tamanho: {len(conta.historico.transacoes_do_dia())}')
         if len(conta.historico.transacoes_do_dia()) >= 2:
             print('Número máximo diário de transações atingido.')
             return

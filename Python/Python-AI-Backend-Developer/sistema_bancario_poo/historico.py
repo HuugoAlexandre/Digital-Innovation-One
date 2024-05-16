@@ -23,11 +23,21 @@ class Historico:
                 yield transacao
 
     def transacoes_do_dia(self):
-        data_atual = datetime.utcnow().date()
-        transacoes = list()
+        data_atual = datetime.now().date()
+        transacoes_do_dia = []
 
         for transacao in self.transacoes:
             data_transacao = datetime.strptime(transacao["data"], "%d-%m-%Y %H:%M:%S").date()
-            if data_atual == data_transacao:
-                transacoes.append(transacao)
-        return transacoes
+            if data_transacao == data_atual:
+                transacoes_do_dia.append(transacao)
+
+        return transacoes_do_dia
+    # def transacoes_do_dia(self):
+    #     data_atual = datetime.utcnow().date()
+    #     transacoes = list()
+
+    #     for transacao in self.transacoes:
+    #         data_transacao = datetime.strptime(transacao["data"], "%d-%m-%Y %H:%M:%S").date()
+    #         if data_atual == data_transacao:
+    #             transacoes.append(transacao)
+    #     return transacoes

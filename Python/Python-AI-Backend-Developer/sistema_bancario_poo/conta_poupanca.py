@@ -32,3 +32,6 @@ class ContaPoupanca(Conta):
             C/P:\t\t{self.numero}
             Titular:\t{self.cliente.nome}
         """
+    
+    def __repr__(self) -> str:
+        return f"ContaPoupanca(numero='{self.numero}', cliente='{self.cliente}')"

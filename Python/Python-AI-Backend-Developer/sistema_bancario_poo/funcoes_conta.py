@@ -28,7 +28,11 @@ def menu():
 def log_transacao(func):
     def envelope(*args, **kwargs):
         resultado = func(*args, **kwargs)
-        print(f"{datetime.now()}: {func.__name__.upper()}")
+        data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open("log.txt", 'a', encoding='utf-8') as log:
+            log.write(
+                f"[{data_hora} Função '{func.__name__}' executada com argumentos {args} e {kwargs}. Retornou {resultado}]\n"
+            )
         return resultado
 
     return envelope
@@ -59,7 +63,7 @@ def recuperar_conta_cliente(cliente):
     return None
 
 @log_transacao
-def depositar(clientes):
+def depositar(clientes, valor):
     cpf = input("Informe o CPF do cliente: ")
     cliente = filtrar_cliente(cpf, clientes)
 
@@ -71,13 +75,13 @@ def depositar(clientes):
     if not conta:
         return
 
-    valor = float(input("Informe o valor do depósito: "))
     transacao = Deposito(valor)
 
     cliente.realizar_transacao(conta, transacao)
 
+
 @log_transacao
-def sacar(clientes):
+def sacar(clientes, valor):
     cpf = input("Informe o CPF do cliente: ")
     cliente = filtrar_cliente(cpf, clientes)
 
@@ -89,10 +93,10 @@ def sacar(clientes):
     if not conta:
         return
 
-    valor = float(input("Informe o valor do saque: "))
     transacao = Saque(valor)
 
     cliente.realizar_transacao(conta, transacao)
+
 
 @log_transacao
 def exibir_extrato(clientes):
@@ -198,6 +202,7 @@ def listar_contas(contas, clientes):
         else:
             print("Esta conta foi excluída.")
 
+@log_transacao
 def excluir_conta(clientes, contas):
     cpf = input("Informe o CPF do cliente: ")
     cliente = filtrar_cliente(cpf, clientes)
