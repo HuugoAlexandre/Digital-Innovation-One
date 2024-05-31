@@ -1,4 +1,4 @@
-package main.map;
+package main.map.OperacoesBasicas;
 
 import java.util.HashMap;
 import java.util.Map;
