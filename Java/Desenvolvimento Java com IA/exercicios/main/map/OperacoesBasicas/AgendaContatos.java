@@ -11,10 +11,12 @@ public class AgendaContatos {
     }
 
     public void adicionarContato(String nome, Integer numero) {
+        nome = nome.toLowerCase();
         agendaContatoMap.put(nome, numero);
     }
 
     public void removerContato(String nome) {
+        nome = nome.toLowerCase();
         if(!agendaContatoMap.isEmpty()) {
             agendaContatoMap.remove(nome);
         }
@@ -25,6 +27,7 @@ public class AgendaContatos {
     }
 
     public Integer pesquisarPorNome(String nome) {
+        nome = nome.toLowerCase();
         Integer numeroPorNome = null;
         if(!agendaContatoMap.isEmpty()) {
             numeroPorNome = agendaContatoMap.get(nome);
